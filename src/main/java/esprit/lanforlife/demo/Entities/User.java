@@ -10,6 +10,7 @@ public class User {
     private int id;
     private String nom;
     private String roles;
+    private String role;
     private String password;
     private String email;
     private String prenom;
@@ -122,5 +123,13 @@ public class User {
 
     public void setVerified(String verified) {
         this.verified = verified;
+    }
+
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
     }
 }

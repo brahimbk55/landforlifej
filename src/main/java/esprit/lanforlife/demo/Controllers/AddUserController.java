@@ -88,7 +88,7 @@ public class AddUserController implements Initializable {
         bName = !tfPrenom.getText().isEmpty();
         bEmail = isValidEmail(tfEmail.getText());
 
-        bTel = validateNumero(tfNom.getText());
+        bTel = !tfNom.getText().isEmpty();
         String passwordError = isValidPassword(tfPassword.getText(), tfPrenom.getText());
         if (passwordError != null) {
             bPass = false;

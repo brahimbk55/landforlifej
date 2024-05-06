@@ -133,12 +133,12 @@ public class UserService implements IService<User> {
 
                 preparedStatement = conn.prepareStatement(query);
                 preparedStatement.setString(1, user.getNom());
-                preparedStatement.setString(2, "[\"ROLE_USER\"]");
+                preparedStatement.setString(2, user.getRoles());
                 preparedStatement.setString(3, hashedPassword);
                 preparedStatement.setString(4, user.getEmail());
                 preparedStatement.setString(5, user.getPrenom());
                 preparedStatement.setBoolean(6, user.getIs_verified());
-                preparedStatement.setString(7, user.getAddress());
+                preparedStatement.setString(7, user.getAddress()+"");
                 preparedStatement.setDate(8, user.getDate_naissance());
 
                 preparedStatement.executeUpdate();
