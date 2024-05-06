@@ -98,6 +98,7 @@ public class signUpController implements Initializable {
             user.setPassword(tfPassword.getText());
             user.setDate_naissance(Date.valueOf(tfdate.getValue()));
             user.setPrenom(tfPrenom.getText());
+            user.setRoles("[\"ROLE_USER\"]");
             user.setAddress(tfAdress.getText());
             if (ps.signUpUser(user)) {
                 Parent root = FXMLLoader.load(getClass().getResource("/esprit/landforlife/demo/Main.fxml"));
