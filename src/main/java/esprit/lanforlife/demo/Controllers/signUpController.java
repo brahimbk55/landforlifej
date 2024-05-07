@@ -101,7 +101,7 @@ public class signUpController implements Initializable {
             user.setRoles("[\"ROLE_USER\"]");
             user.setAddress(tfAdress.getText());
             if (ps.signUpUser(user)) {
-                Parent root = FXMLLoader.load(getClass().getResource("/esprit/landforlife/demo/Main.fxml"));
+                Parent root = FXMLLoader.load(getClass().getResource("/esprit/lanforlife/demo/Main.fxml"));
                 tfNom.getScene().setRoot(root);
 
                 Alert alert = new Alert(Alert.AlertType.INFORMATION);
