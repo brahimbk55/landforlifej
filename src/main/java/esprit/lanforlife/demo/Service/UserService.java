@@ -3,8 +3,11 @@ package esprit.lanforlife.demo.Service;
 import esprit.lanforlife.demo.Entities.User;
 import esprit.lanforlife.demo.Interfaces.IService;
 import esprit.lanforlife.demo.Utils.ConnectionManager;
-import org.mindrot.jbcrypt.BCrypt;
 
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
+
+import java.util.Objects;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -129,8 +132,8 @@ public class UserService implements IService<User> {
             resultSet = preparedStatement.executeQuery();
 
             if (!resultSet.isBeforeFirst()) {
-                String hashedPassword = BCrypt.hashpw(user.getPassword(), BCrypt.gensalt());
-
+                PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+                String hashedPassword = passwordEncoder.encode(user.getPassword());
                 preparedStatement = conn.prepareStatement(query);
                 preparedStatement.setString(1, user.getNom());
                 preparedStatement.setString(2, user.getRoles());
@@ -177,7 +180,8 @@ public class UserService implements IService<User> {
 
             if (resultSet.next()) {
                 String hashedPasswordFromDB = resultSet.getString("password");
-                if (BCrypt.checkpw(password, hashedPasswordFromDB)) {
+                PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+                if (passwordEncoder.matches(password, hashedPasswordFromDB)) {
                     user = new User();
                     user.setId(resultSet.getInt("id"));
                     user.setNom(resultSet.getString("nom"));
@@ -211,45 +215,7 @@ public class UserService implements IService<User> {
         return user;
     }
 
-    public boolean forgetPassUser(String email, String password) throws Exception {
-        PreparedStatement preparedStatement = null;
-        ResultSet resultSet = null;
-        boolean res = false;
 
-        try {
-            Connection conn = ConnectionManager.getConnection();
-            preparedStatement = conn.prepareStatement("SELECT password, email FROM user WHERE email = ?");
-            preparedStatement.setString(1, email);
-            resultSet = preparedStatement.executeQuery();
-
-            if (!resultSet.isBeforeFirst()) {
-                System.out.println("User not found in the database!!");
-                res = false;
-            } else {
-                String hashedPassword = BCrypt.hashpw(password, BCrypt.gensalt());
-                String query = "UPDATE user SET password = ? WHERE email = ?";
-                preparedStatement = conn.prepareStatement(query);
-                preparedStatement.setString(1, hashedPassword);
-                preparedStatement.setString(2, email);
-                preparedStatement.executeUpdate();
-                res = true;
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } finally {
-            try {
-                if (preparedStatement != null) {
-                    preparedStatement.close();
-                }
-                if (resultSet != null) {
-                    resultSet.close();
-                }
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        }
-        return res;
-    }
 
     public boolean isEmailExist(String email) {
         boolean emailExists = false;

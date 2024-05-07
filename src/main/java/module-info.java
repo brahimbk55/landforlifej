@@ -15,6 +15,7 @@ module esprit.monstergym.demo {
     requires itextpdf;
     requires com.google.zxing;
     requires com.google.zxing.javase;
+    requires spring.security.crypto;
     //requires mail;
     //requires java.mail;
 

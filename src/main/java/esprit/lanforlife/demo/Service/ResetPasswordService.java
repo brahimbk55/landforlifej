@@ -4,7 +4,8 @@ import esprit.lanforlife.demo.Entities.ResetPassword;
 import esprit.lanforlife.demo.Entities.User;
 import esprit.lanforlife.demo.Interfaces.IResetPasswordService;
 import esprit.lanforlife.demo.Utils.ConnectionManager;
-import org.mindrot.jbcrypt.BCrypt;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.sql.*;
 import java.util.logging.Level;
@@ -81,7 +82,8 @@ public class ResetPasswordService implements IResetPasswordService {
 
     @Override
     public void ResetPassword(User user) {
-        String hashedPassword = BCrypt.hashpw(user.getPassword(), BCrypt.gensalt());
+        PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+        String hashedPassword = passwordEncoder.encode(user.getPassword());
         // Implement the logic to insert a new user into the database
         try (Connection connection = ConnectionManager.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement("UPDATE  user SET   password = ? WHERE email = ?")) {
